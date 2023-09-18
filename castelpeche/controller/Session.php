@@ -1,6 +1,13 @@
 <?php
+require_once("models/connectionAdmin.php");
 
 class Session {
+    private $sessionClass;
+
+    public function __construct()
+    {
+        $this->sessionClass = new ConnectionAdmin();
+    }
     function connexion()
     {
         if(!$_POST) {
@@ -9,15 +16,13 @@ class Session {
             $user = $_POST["username"];
             $mdp = $_POST["password"];
             if (!empty($user) && !empty($mdp)) {
-                require_once("models/connectionAdmin.php");
-                connectionAdmin($user, $mdp);
+                $this->sessionClass->connectionAdmin($user, $mdp);
             }
         }
     }
     
     function deconnexion()
     {
-        require_once("models/connectionAdmin.php");
-        deconnectionAdmin();
+        $this->sessionClass->deconnectionAdmin();
     }
 }

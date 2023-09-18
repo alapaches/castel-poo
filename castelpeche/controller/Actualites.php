@@ -4,8 +4,15 @@ require("models/dbconnect.php");
 require_once("models/articleModel.php");
 
 class Actualites {
+    private $articleModel;
+
+    public function __construct()
+    {
+        $this->articleModel = new ArticleModel();
+    }
+    
     function show() {
-        $articles = getArticles();
+        $articles = $this->articleModel->getArticles();
         require("templates/actualite.php");
     }
     
@@ -24,7 +31,7 @@ class Actualites {
             if(in_array($extensionFichier, $extensionsAutorisees)) {
                 move_uploaded_file($_FILES["photo"]["tmp_name"], $repertoireFichierCible);
                 if (!empty($name) && !empty($nomFichier) && !empty($desc)) {
-                    addArticle($name, $nomFichier, $desc);
+                    $this->articleModel->addArticle($name, $nomFichier, $desc);
                 }
             }
         }
@@ -34,21 +41,21 @@ class Actualites {
         if(!empty($_POST["article"]) && !empty($_POST["photo"])) {
             $idArticle = $_POST["article"];
             $photoArticle = $_POST["photo"];
-            supprimerArticle($idArticle, $photoArticle);
+            $this->articleModel->supprimerArticle($idArticle, $photoArticle);
         }
     }
     
     function update($article) {
         $idArticle = intval($article);
         if(empty($_POST)) {
-            $results = getArticle($idArticle);
+            $results = $this->articleModel->getArticle($idArticle);
             require("templates/forms/updateForm.php");
         } else {
             $titre = $_POST["titre"];     //On récupére les variable envoyer du formulaire en méthode POST
             $photo = $_POST["photo"];     //On récupére les variable envoyer du formulaire en méthode POST
             $description = $_POST["description"];    //On récupére les variable envoyer du formulaire en méthode POST
             $id = $_POST["id"];     //On récupére les variables envoyer du formulaire en méthode POST
-            updateArticle($id, $titre, $photo, $description);
+            $this->articleModel->updateArticle($id, $titre, $photo, $description);
         }
     }
 }
