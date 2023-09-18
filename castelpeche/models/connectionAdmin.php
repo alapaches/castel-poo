@@ -1,14 +1,9 @@
 <?php
 require_once('models/dbconnect.php');   // On appelle le fichier de conexion de la base de donnée
-
+session_start();
 
 class ConnectionAdmin {
 
-    public function __construct()
-    {
-        session_start();
-    }
-    
     function connectionAdmin($user, $mdp) {
         global $database;
     
